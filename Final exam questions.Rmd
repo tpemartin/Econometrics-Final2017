@@ -11,14 +11,14 @@ id<-"" #學號
 姓名：`r name`   
 學號：`r id`
 
-# 注意事項：
+# 注意事項：  
+*  請先另存新檔：File-> Save as...， 將檔名後面附加你的學號：例如學號為410372839，則本檔存時名字由"Final exam questions"變成"Final exam questions 410372839"，附檔名Rmd請勿修改。
+*  請確認另存新檔的答案.Rmd程式已存到`C:\Program Files\Minlink\Lc9\Client\Temp\Mission` 目錄下 ；只要存.Rmd檔就好。此目錄如果有其他檔案，也請先刪除，以免老師收回不必要的檔案而產生誤解。
 * 請記得填寫上面的姓名、學號。
 * 共21題，每題5分。
 * 除了某些二選一的題目，如第(3)題，直接在該題刪去不對答案外，其他題都只在程式區塊作答。
 * 有些題目有預設物件，如: ols1<-NULL，如果你知道答案，請把NULL換成正確程式碼； 如果不知道請保留NULL。
 * 有R程式區塊的（\```{r}  \```），需要有程式碼。
-* 交答案檔時，請File-> Save as...， 將檔名後面附加你的學號：例如學號為410372839，則本檔存時名字由"Final exam questions"變成"final exam questions 410372839"，附檔名Rmd請勿修改。
-* 請將答案.Rmd程式存到`C:\Program Files\Minlink\Lc9\Client\Temp\Mission` 目錄下 ；只要存.Rmd檔就好。此目錄如果有其他檔案，也請先刪除，以免老師收回不必要的檔案而產生誤解。
 
 ```{r include=FALSE}
 knitr::opts_chunk$set(echo = FALSE,message=FALSE, warning = FALSE)

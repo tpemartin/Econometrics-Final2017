@@ -20,6 +20,8 @@ library(pscl)
 napster <- read_csv("napster.csv")
 ```
 
+> 注意：(4)(5)兩題的文字會有各自表述的模糊問題，所以送分。
+
 在網路音樂還不發達時，大眾聽音樂習慣是買CD聽。第一個網路音樂下載服務是1999年出現的Napster P2P音樂檔案分享，它允許使用者把CD轉出來的音樂檔免費讓其他使用者下載。Napster出現後一直爭議不斷，有人說它會造成音樂出版商的收入降低；也有人說當音樂散佈越容易時，會產生廣告效果而增加出版商收入。我們接下來就是要分析：Napster的出現是否會增加家戶使用者在CD音樂購買上的支出。
 
 我們所使用的資料napster.csv含蓋1998及2000兩年，變數cdall代表CD音樂購買支出（以下簡稱音樂支出），nint代表有使用網路的虛擬變數（1表示有網路），year為資料年份（只有1998與2000年兩年)。由於我們無法得知使用者是否有用Napster，但要使用它一定要有網路，且必需是在1998年之後。  
@@ -34,7 +36,7 @@ exp.int1<-mean2000[nint==1,"mean.cdall"]
 exp.int0<-mean2000[nint==0,"mean.cdall"]
 ```
 
-我們發現2000年，有網路的人平均音樂花費為【(1) `r as.numeric(exp.int1)`】元，而沒網路的人平均花費為【(2)`r as.numeric(exp.int0)`】元，前者比後者高出`r as.numeric(exp.int1-exp.int0)`元， 如果把它都歸因於Napster效果，表示Napster的出現使得音樂出版商的收入【(3) 減少／增加] 。
+我們發現2000年，有網路的人平均音樂花費為【(1) `r as.numeric(exp.int1)`】元，而沒網路的人平均花費為【(2)`r as.numeric(exp.int0)`】元，前者比後者高出`r as.numeric(exp.int1-exp.int0)`元， 如果把它都歸因於Napster效果，表示Napster的出現使得音樂出版商的收入【(3) 減少 】。
 
 然而這個比較忽略了立足點的不平等，有網路的人有可能是不愛聽音樂的一群人，掛網對他們的效用比聽音樂高，在這種情況下，單純兩者相比會【(4) 高估／低估】 Napster的效果，表示Napster對音樂花費的影響應該比前述金額來的【(5) 更大／更小】。
 
@@ -47,7 +49,7 @@ napster %>% filter(year==1998) %>%
 exp.int1b<-mean1998[nint==1,"mean.cdall"]
 exp.int0b<-mean1998[nint==0,"mean.cdall"]
 ```  
-我們發現，在1998年，有網路的人平均音樂花費為【(6)`r as.numeric(exp.int1b)`】元，而沒網路的人平均花費為【(7)`r as.numeric(exp.int0b)`】元，前者比後者高出`r as.numeric(exp.int1b-exp.int0b)`元。若把這部份的立足點差異從2000年的差異扣掉，我們得到的效果為`r as.numeric(exp.int1-exp.int0)-as.numeric(exp.int1b-exp.int0b)`，表示Napster的出現會【(8) 增加 ／ 減少】音樂銷售－－這剛好是「差異中之差異法（Difference-in-Difference，即稱DiD）」的精神。
+我們發現，在1998年，有網路的人平均音樂花費為【(6)`r as.numeric(exp.int1b)`】元，而沒網路的人平均花費為【(7)`r as.numeric(exp.int0b)`】元，前者比後者高出`r as.numeric(exp.int1b-exp.int0b)`元。若把這部份的立足點差異從2000年的差異扣掉，我們得到的效果為`r as.numeric(exp.int1-exp.int0)-as.numeric(exp.int1b-exp.int0b)`，表示Napster的出現會【(8) 增加 】音樂銷售－－這剛好是「差異中之差異法（Difference-in-Difference，即稱DiD）」的精神。
 
 DiD除了使用二次平均差異計算外，也可以用一條如下的迴歸式來估計：  
 $$ cdall_i=\delta T_i +\beta_0+\beta_1 Y2000_i+\beta_2 nint_i+\epsilon_i$$  
@@ -61,7 +63,7 @@ napster %>%
 delta.coef<-summary.ols.did$coefficients["T","Estimate"]
 delta.t<-summary.ols.did$coefficients["T","t value"]
 ``` 
-由估計結果，我們得到Napster的DiD效果估計值為【(9)`r delta.coef`】，其t值為【(10)`r delta.t`】，在5%的顯著水準下是【(11) 顯著／不顯著】的。
+由估計結果，我們得到Napster的DiD效果估計值為【(9)`r delta.coef`】，其t值為【(10)`r delta.t`】，在5%的顯著水準下是【(11) 顯著】的。
 
 不過，這裡用來捕捉Napster效果的變數T，嚴格上並不是真的代表消費者是不是有用Napster－－要有用才會受它影響。也就是說T=1與T=0兩群人的音樂消費支出差異有可能是其他非網路因素造成的，DiD雖然控制了Napster還沒出現時（即1998年），有網路和沒網路兩群人的音樂支出立足點差異，但在2000年，有網路（T=1）和沒網路（T=0）的兩群人，有可能群體內的人口結構有改變，而造成音樂消費支出差異。例如，隨著網路普及，以前有用網路多是年青人族群，但後來中老年人也加入網路人口，而使得T=1的平均年齡結構上升；如果年齡會影響音樂支出，則會使T＝1與T=0兩者的音樂支出差異還包含了年齡結構改變。
 
@@ -96,7 +98,7 @@ age.effect<-mfx.result$mfxest["age","dF/dx"]
 male.effect<-mfx.result$mfxest["factor(male)1","dF/dx"]
 ```
 
-在第一階段，以平均代表性個人來，年紀大一歲的人，他是T=1組的機率會增加【(13)`r age.effect`】，而男性比女性多了【(14)`r male.effect`】的機率屬於T=1組。另外，在這個階段的估計，選擇模型猜對組別的機率有【(15)`r p.alternative.correct`%】。如果在這階段沒有任何解釋變數，則隨機抽出一人，應猜測此人屬於【(16)T=0 / T=1】組，猜對率為【(17)`r p.null.correct`】。
+在第一階段，以平均代表性個人來，年紀大一歲的人，他是T=1組的機率會增加【(13)`r age.effect`】，而男性比女性多了【(14)`r male.effect`】的機率屬於T=1組。另外，在這個階段的估計，選擇模型猜對組別的機率有【(15)`r p.alternative.correct`%】。如果在這階段沒有任何解釋變數，則隨機抽出一人，應猜測此人屬於【(16)T=0 】組，猜對率為【(17)`r p.null.correct`】。
 
 在第二階段，我們粹取inverse Mill's ratio (IMR) 然後對迴歸模型進行修正估計
 ```{r}
@@ -112,4 +114,4 @@ rho.pvalue<-heckit.summary$coefficients["lambda","Pr(>|t|)"]
 
 T.effect<-heckit.summary$coefficients["T","Estimate"]
 ```
-修正完後，Napster的效果估計值是使個人音樂消費增加【(18)`r T.effect`】；這裡選擇偏誤係數值為【(19)`r rho`】，其p-value為【(20)`r rho.pvalue`】，在5%的顯著水準下是【(21) 顯著 / 不顯著] 的，表示不能忽略效應選擇，否則會產生估計偏誤。
+修正完後，Napster的效果估計值是使個人音樂消費增加【(18)`r T.effect`】；這裡選擇偏誤係數值為【(19)`r rho`】，其p-value為【(20)`r rho.pvalue`】，在5%的顯著水準下是【(21) 顯著】 的，表示不能忽略效應選擇，否則會產生估計偏誤。
